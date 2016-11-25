@@ -33,6 +33,8 @@ When the correction is done, **move the card** from the ```Correction in progres
 #### Publication of your subtitles
 **Thank you!** You are amazing, we are really happy to work with you!
 
+![alt tag](http://img4.hostingpics.net/pics/925034sealofapproval.png)
+
 ### Correct / proofread subitted subtitles
 #### Choose a video
 If some videos (with [subtitles] in the title) **are listed in the ```Correction in progress``` column**, you can choose one and assign yourself to it.
@@ -44,3 +46,5 @@ When the correction is done, **move the card** from the ```Correction in progres
 
 #### Publication of your subtitles
 **Thank you!** You are amazing, we are really happy to work with you!
+
+![alt tag](http://img4.hostingpics.net/pics/925034sealofapproval.png)
