@@ -17,7 +17,7 @@ Management of video subtitles for Mr Mélenchon's videos.
 ## Ressources
 - English subtitles management board: https://github.com/LucileDT/jlm-video-subtitles/projects/1
 - English documentation:
-  - [GitHub user manual](french-ressources/comment-utiliser-github.md)
-  - [How to involve yourself](french-ressources/comment-participer.md)
+  - [GitHub user manual](english-ressources/how-to-use-github.md)
+  - [How to involve yourself](english-ressources/how-to-involve-yourself.md)
 - FAQ : https://github.com/LucileDT/jlm-video-subtitles/issues/19
 - Members presentation : https://github.com/LucileDT/jlm-video-subtitles/issues/17
