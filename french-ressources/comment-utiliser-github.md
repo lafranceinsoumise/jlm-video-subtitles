@@ -52,7 +52,9 @@ Une fois l'issue créée, vous pouvez lui ajouter des labels. Ce sont des étiqu
 ![Aperçu du bouton Labels](http://img11.hostingpics.net/pics/545155Capturedcran20161202015620.png)
 
 Pour ajouter (ou enlever) un label à une issue, il faut cliquer sur Labels, à droite de l'issue, puis sélectionner dans la liste le ou les label.s à ajouter :
+
 ![Aperçu du bouton pour ajouter des labels](http://img11.hostingpics.net/pics/501568Capturedcran20161202015936.png)
+
 **/!\ Vous ne pouvez faire ça que si vous faites partie des contributeurs du projet !** Donc si vous n'y arrivez pas, signalez-le nous, on vous y ajoutera.
 
 ## L'onglet Projects
@@ -62,4 +64,10 @@ Vous trouverez ici la liste des tableaux de gestion correspondant aux différent
 - la vue d'ensemble des sous-titres,
 - la communication au sein de l'équipe.
 
-Dans chaque projet, vous retrouverez des colonnes.
+Dans chaque projet, vous retrouverez des colonnes. Dans les projets de sous-titrage, celles-ci permettent de voir à quelle étape de création les sous-titres se trouvent.
+
+Vous pouvez glisser-déposer les issues d'une colonne à l'autre. Par défaut, les nouvelles issues n'apparaissent pas dans les projects, vous devrez donc les y ajouter. Pour ce faire, cliquez sur Add card, en haut à droite du projet. Un panneau s'ouvre, et vous n'avez plus qu'à glisser-déposer votre issue dans la colonne adéquate.
+
+# Astuces
+## Lien entre issues
+Vous pouvez référencer une issue dans une autre en mentionnant son numéro. Par exemple, pour l'issue 1, il vous suffit d'écrire #1 là où vous souhaitez en parler : Github fera lui-même un lien cliquable vers l'issue 1.
