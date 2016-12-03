@@ -8,9 +8,9 @@ Vous êtes ici : [Accueil](README.md) > Ressources en français > [Comment vous 
 Vous trouverez les sous-titres français sur [ce projet](https://github.com/jlm2017/jlm-video-subtitles/projects/2), et les sous-titres anglais [ici](https://github.com/jlm2017/jlm-video-subtitles/projects/1).
 
 ## Sommaire
-- **Vous voulez créer de nouveaux sous-titres ?** Rendez vous ici : https://github.com/LucileDT/jlm-english-subtitles/blob/master/README.md#create-new-subtitles
-- **Vous souhaitez corriger des sous-titres existants ?** Rendez vous ici : https://github.com/LucileDT/jlm-english-subtitles/blob/master/README.md#correct--proofread-subitted-subtitles
-- **Vous souhaitez valider des sous-titres existants ?** Il s'agit de la seconde relecture, qui donne sur la mise en ligne des sous-titres. Rendez vous ici : https://github.com/LucileDT/jlm-english-subtitles/blob/master/README.md#correct--proofread-subitted-subtitles
+- **Vous voulez créer de nouveaux sous-titres ?** Rendez vous ici : https://github.com/jlm2017/jlm-video-subtitles/blob/master/french-ressources/comment-participer.md#cr%C3%A9ation-de-sous-titres
+- **Vous souhaitez corriger des sous-titres existants ?** Rendez vous ici : https://github.com/jlm2017/jlm-video-subtitles/blob/master/french-ressources/comment-participer.md#premi%C3%A8re-relecture-des-sous-titres
+- **Vous souhaitez valider des sous-titres existants ?** Il s'agit de la seconde relecture, qui donne sur la mise en ligne des sous-titres. Rendez vous ici : https://github.com/jlm2017/jlm-video-subtitles/blob/master/french-ressources/comment-participer.md#seconde-relecture-des-sous-titres
 
 ## Procédure
 ### Création de sous-titres
