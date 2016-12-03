@@ -1,4 +1,4 @@
-Vous êtes ici: [Homepage](README.md) > Ressources en français > [Comment utiliser Github ?](comment-utiliser-github.md)
+Vous êtes ici: [Accueil](README.md) > Ressources en français > [Comment utiliser Github ?](comment-utiliser-github.md)
 
 # Introduction
 **Qu'est-ce que Github ?**
