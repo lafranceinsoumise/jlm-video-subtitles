@@ -1,6 +1,3 @@
-# Rédaction en cours
-Merci de votre patience !
-
 Vous êtes ici : [Accueil](README.md) > Ressources en français > [Comment vous impliquer dans le projet](comment-participer.md)
 
 # Comment vous impliquer
