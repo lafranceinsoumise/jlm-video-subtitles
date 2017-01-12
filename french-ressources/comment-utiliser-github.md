@@ -68,6 +68,8 @@ Dans chaque projet, vous retrouverez des colonnes. Dans les projets de sous-titr
 
 Vous pouvez glisser-déposer les issues d'une colonne à l'autre. Par défaut, les nouvelles issues n'apparaissent pas dans les projects, vous devrez donc les y ajouter. Pour ce faire, cliquez sur Add card, en haut à droite du projet. Un panneau s'ouvre, et vous n'avez plus qu'à glisser-déposer votre issue dans la colonne adéquate.
 
+![Aperçu du lien Add cards](http://img15.hostingpics.net/pics/125279Capturedcran20170109221602.png)
+
 # Astuces
 ## Lien entre issues
 Vous pouvez référencer une issue dans une autre en mentionnant son numéro. Par exemple, pour l'issue 1, il vous suffit d'écrire #1 là où vous souhaitez en parler : Github fera lui-même un lien cliquable vers l'issue 1.
