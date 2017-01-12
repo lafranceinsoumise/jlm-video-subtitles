@@ -22,7 +22,7 @@ Mais non, ne vous en faites pas ! Nous somme ici pour vous guider pas à pas dan
 # Comment fonctionne Github ?
 *À l'origine, le projet s'appelait "jlm-english-subtitles", il est donc possible qu'il existe des liens morts. Si vous en trouvez, n'hésitez pas à nous les signaler !*
 
-Vous pouvez aller sur la page d'accueil du projet ici : https://github.com/LucileDT/jlm-video-subtitles. Quand on arrive dessus, on peut lire le fichier README.md : c'est le fichier qui contient les informations générales sur le projet (ce que c'est, comment il marche et où on peut trouver des ressources documentaires, par exemple). N'importe quel contributeur au projet peut écrire dedans, du moment qu'il est ajouté à la liste des contributeurs.
+Vous pouvez aller sur la page d'accueil du projet ici : https://github.com/jlm2017/jlm-video-subtitles. Quand on arrive dessus, on peut lire le fichier README.md : c'est le fichier qui contient les informations générales sur le projet (ce que c'est, comment il marche et où on peut trouver des ressources documentaires, par exemple). N'importe quel contributeur au projet peut écrire dedans, du moment qu'il est ajouté à la liste des contributeurs.
 
 En haut de la page se trouvent différents onglets :
 ![Aperçu des onglets](http://img11.hostingpics.net/pics/329744Capturedcran20161202011350.png)
