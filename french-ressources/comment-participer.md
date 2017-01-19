@@ -20,7 +20,7 @@ Rendez vous dans un des deux tableaux de gestion des sous-titres ([français](ht
 Si certaines issues (dont le titre contient [subtitles]) sont listées dans la première colonne (```sous-titres requis```) ou portent le label ```Process: Paused```, vous pouvez en choisir une et vous y assigner. 
 
 **Si la première colonne est vide ou si vous en avez commencé à sous-titrer une vidéo avant d'arriver ici, veuillez suivre cette procédure :**
-- Créez une issue (https://github.com/jlm2017/jlm-english-subtitles/issues/new) en utilisant ce modèle : https://github.com/jlm2017/jlm-english-subtitles/issues/1
+- Créez une issue (https://github.com/jlm2017/jlm-video-subtitles/issues/new) en utilisant ce modèle : https://github.com/jlm2017/jlm-video-subtitles/issues/1
 - Assignez-vous à cette issue
 - Ajoutez les labels appropriés à l'issue en question
 - Rendez vous sur la page de projet correspondant ([français](https://github.com/jlm2017/jlm-video-subtitles/projects/2) ou [anglais](https://github.com/jlm2017/jlm-video-subtitles/projects/1))
