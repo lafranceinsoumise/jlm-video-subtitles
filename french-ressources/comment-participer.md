@@ -39,12 +39,14 @@ Une fois que la rédaction des sous-titre est terminée, déplacez votre issue d
 
 Dès que quelqu'un sera disponible, il viendra vérifier votre travail (correction des fautes d'orthographe et des fautes de frappes, par exemple). À partir de ce moment-là, vous n'avez plus besoin de vous occuper de votre issue, à part pour contacter les personnes qui s'occupent de la vérification : ce sont ces derniers qui vont la prendre en charge.
 
-![alt tag](http://img4.hostingpics.net/pics/925034sealofapproval.png)
+![Seal of Approval](http://img4.hostingpics.net/pics/925034sealofapproval.png)
 
 
 ### Première relecture des sous-titres
 #### Choisir une vidéo
 Les issues concernant des vidéos (elles contiennent [subtitles] dans leur titre) placées dans la troisième colonne (```prêt pour correction (1) ou correction (1) en cours```) sont pour vous. Celles qui portent le label ```Process: [2] Ready for review (1)``` et **ne comportent pas** le label ```Process: Someone is working on this issue``` nécessitent que quelqu'un s'occupe de leur relecture.
+
+Vous trouverez ici [la liste des issues en attente de première relecture](https://github.com/jlm2017/jlm-video-subtitles/issues?utf8=%E2%9C%93&q=is%3Aopen%20label%3A%22Process%3A%20%5B2%5D%20Ready%20for%20review%20(1)%22%20-label%3A%22Process%3A%20Someone%20is%20working%20on%20this%20issue%22)
 
 Choisissez-en une et commentez-la pour signalez que vous commencez la relecture. Remplacez le label ```Process: [2] Ready for review (1)``` par le label ```Process: [3] Review (1) in progress```. Ajoutez le label ```Process: Someone is working on this issue```, qui signale que vous vous occupez des sous-titres.
 
@@ -61,11 +63,13 @@ Dès que quelqu'un sera disponible, il viendra vérifier une seconde fois les so
 
 *Si vous arrêtez votre rédaction, enlevez le label ```Process: Someone is working on this issue```. Vous pouvez également poster un commentaire sur votre issue pour dire que vous interrompez votre travail.*
 
-![alt tag](http://img4.hostingpics.net/pics/925034sealofapproval.png)
+![Seal of Approval](http://img4.hostingpics.net/pics/925034sealofapproval.png)
 
 ### Seconde relecture des sous-titres
 #### Choisir une vidéo
 Les issues concernant des vidéos (elles contiennent [subtitles] dans leur titre) placées dans la quatrième colonne (```prêt pour correction (2) ou correction (2) en cours```) sont pour vous. Celles qui portent le label ```Process: [4] Ready for review (2)``` et **ne comportent pas** le label ```Process: Someone is working on this issue``` nécessitent que quelqu'un s'occupe de leur relecture.
+
+Vous trouverez ici [la liste des issues en attente de seconde relecture](https://github.com/jlm2017/jlm-video-subtitles/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20label%3A%22Process%3A%20%5B4%5D%20Ready%20for%20review%20(2)%22%20-label%3A%22Process%3A%20Someone%20is%20working%20on%20this%20issue%22)
 
 Choisissez-en une et commentez-la pour signalez que vous commencez la relecture. Remplacez le label ```Process: [4] Ready for review (2)``` par le label ```Process: [5] Review (2) in progress```. Ajoutez le label ```Process: Someone is working on this issue```, qui signale que vous vous occupez des sous-titres.
 
@@ -78,4 +82,4 @@ Une fois la seconde correction validée, les sous-titres seront mis en ligne dir
 
 Déplacez l'issue de la quatrième colonne (```prêt pour correction (2) ou correction (2) en cours```) à la cinquième colonne (```validés et en ligne```). Remplacez le label ```Process: [5] Review (2) in progress``` par le label ```Process: [6] Approved```. Retirez le label ```Process: Someone is working on this issue```. Vous pouvez commenter l'issue pour signaler que les sous-titres sont en ligne, et pourquoi pas, remercier les participants !
 
-![alt tag](http://img4.hostingpics.net/pics/925034sealofapproval.png)
+![Seal of Approval](http://img4.hostingpics.net/pics/925034sealofapproval.png)
