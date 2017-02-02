@@ -1,4 +1,4 @@
-You are here: [Homepage](README.md) > English Ressources > [How to involve yourself](how-to-involve-yourself.md)
+You are here: [Homepage](../README.md) > English Ressources > [How to involve yourself](how-to-involve-yourself.md)
 
 # How to involve yourself
 *Please check the English subtitles Project tab (https://github.com/jlm2017/jlm-video-subtitles/projects/1).*

@@ -1,4 +1,4 @@
-Vous êtes ici : [Accueil](README.md) > Ressources en français > [Comment vous impliquer dans le projet](comment-participer.md)
+Vous êtes ici : [Accueil](../README.md) > Ressources en français > [Comment vous impliquer dans le projet](comment-participer.md)
 
 # Comment vous impliquer
 *N'hésitez pas à ajouter des commentaires ou à créer de nouvelles issues pour communiquer avec nous !*
