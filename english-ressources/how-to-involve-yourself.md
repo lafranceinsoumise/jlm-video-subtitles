@@ -27,12 +27,13 @@ Once you have **finished**, **move the card** from ```Redaction in progress``` c
 At this step, **please contact someone** by commenting the issue with a @someone to ask for a **correction/proofreading**.
 
 #### Correction done, waiting for JLM validation
-When the correction is done, **move the card** from the ```Correction in progress``` column to ```Waiting for JLM validation```. You can **ask to @LucileDT** to send a tweet at JLM (by commenting your issue), the JLM's team will quickly validate your work. 
+When the correction is done, **move the card** from the ```Correction in progress``` column to ```Waiting for JLM validation```.
+You can **ask to @LucileDT** to send a tweet at JLM (by commenting your issue), the JLM's team will quickly validate your work.
 
 #### Publication of your subtitles
 **Thank you!** You are amazing, we are really happy to work with you!
 
-![alt tag](http://img4.hostingpics.net/pics/925034sealofapproval.png)
+![Seal of Approval](http://img4.hostingpics.net/pics/925034sealofapproval.png)
 
 ### Correct / proofread subitted subtitles
 #### Choose a video
@@ -46,4 +47,4 @@ When the correction is done, **move the card** from the ```Correction in progres
 #### Publication of your subtitles
 **Thank you!** You are amazing, we are really happy to work with you!
 
-![alt tag](http://img4.hostingpics.net/pics/925034sealofapproval.png)
+![Seal of Approval](http://img4.hostingpics.net/pics/925034sealofapproval.png)
