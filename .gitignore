@@ -1,0 +1,10 @@
+# JetBrains
+.idea
+
+# VirtualEnv
+venv*
+
+# OAuth2 Credentials
+config/client-key.txt
+config/client-secrets.json
+config/credentials-oauth2.json
