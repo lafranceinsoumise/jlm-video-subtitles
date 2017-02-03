@@ -154,7 +154,7 @@ def get_authenticated_service(_args):
 ###############################################################################
 
 
-def get_videos(page=None):
+def get_videos_of_channel(page=None):
     url = 'https://www.googleapis.com/youtube/v3/search'
     parameters = {
         'key': YOUTUBE_API_KEY,
@@ -167,6 +167,24 @@ def get_videos(page=None):
 
     if page is not None:
         parameters['pageToken'] = page
+
+    response = get(url, params=parameters)
+
+    if not response.ok:
+        cprint("Request to Youtube API failed with response :", "red")
+        print(response.text)
+
+    return response.json()
+
+
+def get_videos(video_ids):
+    url = 'https://www.googleapis.com/youtube/v3/videos'
+    parameters = {
+        'key': YOUTUBE_API_KEY,
+        'id': ','.join(video_ids),
+        'part': 'snippet',
+        'maxResults': '50',
+    }
 
     response = get(url, params=parameters)
 
@@ -239,37 +257,93 @@ class Video:
 
 if __name__ == "__main__":
 
+    argparser.add_argument(
+        "--videos",
+        nargs="+",
+        metavar="VIDEO_ID",
+        help="""
+        Identifier(s) of the YouTube video(s) for which the captions are to be
+        downloaded. When you provide this option, the script will only back up
+        the captions of the specified video(s), and not of all the other videos
+        of the channel, like it would normally do.
+        Very useful to make a quick backup of only one or more video(s).
+        You cannot provide more than 50 video ids to this parameter.
+        Remember: YouTube's API has quotas, and using this option is the best
+        way to not blow them.
+        """
+    )
+
+    argparser.add_argument(
+        "-?", "-h", "--help", dest="help", action="store_true",
+        help="Display this documentation and exit."
+    )
+
     args = argparser.parse_args()
+
+    if args.help:
+        argparser.print_help()
+        argparser.exit(0)
 
     cprint("Authenticating with YouTube...", "yellow")
 
     youtube = get_authenticated_service(args)
 
-    print(
-        colored("Collecting videos of channel ", "yellow") +
-        colored(CHANNEL_ID, "magenta") +
-        colored("...", "yellow")
-    )
-
-
-    def _parse_videos():
-        for video_data in jsonResponse['items']:
-            videos.append(Video(
-                yid=video_data['id']['videoId'],
+    def _parse_videos(_videos, _json):
+        for video_data in _json['items']:
+            _id = video_data['id']
+            if type(_id) is dict:
+                _id = _id['videoId']
+            _videos.append(Video(
+                yid=_id,
                 title=video_data['snippet']['title'],
                 date=video_data['snippet']['publishedAt']
             ))
 
+    def _s(int_or_list):
+        if type(int_or_list) is list:
+            int_or_list = len(int_or_list)
+        return '' if int_or_list == 1 else 's'
 
     videos = []
-    jsonResponse = get_videos()
-    _parse_videos()
-    while 'nextPageToken' in jsonResponse:
-        nextPageToken = jsonResponse['nextPageToken']
-        jsonResponse = get_videos(page=nextPageToken)
-        _parse_videos()
+    if args.videos:
+        print(
+            colored("Selecting video%s " % _s(args.videos), "yellow") +
+            colored(', '.join(args.videos), "magenta") +
+            colored("...", "yellow")
+        )
+        jsonResponse = get_videos(args.videos)
+        if jsonResponse['pageInfo']['totalResults'] != len(args.videos):
+            if len(args.videos) == 1:
+                cprint("""
+                Video %s probably do not exist.
+                """ % args.videos[0], "red")
+            else:
+                cprint("""
+                We could only retrieve %d out of the %d videos you provided.
+                Either they don't exist, or you provided too many, because
+                we do not support pagination here yet. Ask for it?
+                """ % (
+                    jsonResponse['pageInfo']['totalResults'], len(args.videos)
+                ), "red")
+            exit(1)
+        _parse_videos(videos, jsonResponse)
+    else:
+        print(
+            colored("Collecting videos of channel ", "yellow") +
+            colored(CHANNEL_ID, "magenta") +
+            colored("...", "yellow")
+        )
 
-    print("Found %s videos." % colored(str(len(videos)), "yellow"))
+        jsonResponse = get_videos_of_channel()
+        _parse_videos(videos, jsonResponse)
+        while 'nextPageToken' in jsonResponse:
+            nextPageToken = jsonResponse['nextPageToken']
+            jsonResponse = get_videos_of_channel(page=nextPageToken)
+            _parse_videos(videos, jsonResponse)
+
+    print("Found %s video%s." % (
+        colored(str(len(videos)), "yellow"), _s(videos)
+    ))
 
     cprint("Downloading captions from YouTube...", "yellow")
 
@@ -313,7 +387,8 @@ if __name__ == "__main__":
             captions_count += 1
             print("  Retrieved %s" % colored(caption_filename, "yellow"))
 
-    print("Downloaded a grand total of %s captions."
-          % colored(captions_count, "yellow"))
+    print("Downloaded a grand total of %s caption%s." % (
+        colored(captions_count, "yellow"), _s(captions_count)
+    ))
 
     cprint("Done!", "green")
