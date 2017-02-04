@@ -259,7 +259,7 @@ if __name__ == "__main__":
     argparser = argparse.ArgumentParser(
         parents=[argparser], add_help=False,
         description="""
-        A simple script to download the all the published captions of all the
+        A simple script to download all the published captions of all the
         videos of a channel from YouTube.
         It will ignore captions made with ASR (Automatic Speech Recognition).
         You need to set up `client-key.txt` and `client-secrets.json`
@@ -389,7 +389,7 @@ if __name__ == "__main__":
         print("Retrieving captions for %s" % colored(video.title, "yellow"))
         jsonResponse = get_captions_for_video(video.yid)
 
-        for caption_index, caption_data in enumerate(jsonResponse['items']):
+        for caption_data in jsonResponse['items']:
             caption_kind = caption_data['snippet']['trackKind']
             if caption_kind != 'standard':
                 print("  Ignored caption of kind %s." % caption_kind)
@@ -403,14 +403,32 @@ if __name__ == "__main__":
             caption_contents = youtube.captions().download(
                 id=caption_id,
                 tfmt=args.extension
-            ).execute()
-            caption_year = video.date.strftime("%Y")
+            ).execute().decode('utf-8')
+
+            # YouTube writes comments on the first three lines of the VTT file:
+            # WEBVTT
+            # Kind: captions
+            # Language: fr
+            #
+            # So we're going to append our metadata to these comments.
+            if args.extension == 'vtt':
+                caption_lines = caption_contents.split("\n")
+                caption_contents_header = caption_lines[0:3]
+                caption_contents_rest = caption_lines[3:]
+                caption_contents_header.append(
+                    "LastUpdated: %s" % caption_data['snippet']['lastUpdated']
+                )
+                caption_contents_header.append("Caption: %s" % caption_id)
+                caption_contents_header.append("Video: %s" % video.yid)
+                caption_contents = "\n".join(caption_contents_header) + "\n" \
+                                   + "\n".join(caption_contents_rest)
 
             caption_filename = "%s.%s.%s.%s.%s" % (
                 video.date.strftime("%Y-%m-%d"), video.slug,
                 caption_lang, caption_id, args.extension
             )
 
+            caption_year = video.date.strftime("%Y")
             caption_path = os.path.join(
                 CAPTIONS_DIRECTORY, caption_year, caption_filename
             )
@@ -418,7 +436,7 @@ if __name__ == "__main__":
             if not os.path.exists(os.path.dirname(caption_path)):
                 os.makedirs(os.path.dirname(caption_path))
             with open(caption_path, mode="w") as caption_file:
-                caption_file.write(caption_contents)
+                caption_file.write(caption_contents.encode('utf-8'))
 
             captions_count += 1
             print("  Retrieved %s" % colored(caption_filename, "blue"))
