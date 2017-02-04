@@ -26,6 +26,7 @@ import re
 import sys
 import datetime
 import dateutil.parser
+import argparse
 import httplib2
 
 from apiclient.discovery import build_from_document
@@ -44,10 +45,6 @@ from slugify import slugify
 init()
 
 ###############################################################################
-
-CHANNEL_ID = "UCk-_PEY3iC6DIGJKuoEe9bw"  # JEAN-LUC MÉLENCHON
-
-CAPTIONS_EXTENSION = 'sbv'  # or 'srt', but sbv looks better naked :)
 
 CAPTIONS_DIRECTORY = os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..', 'subtitles'
@@ -154,11 +151,11 @@ def get_authenticated_service(_args):
 ###############################################################################
 
 
-def get_videos_of_channel(page=None):
+def get_videos_of_channel(channel_id, page=None):
     url = 'https://www.googleapis.com/youtube/v3/search'
     parameters = {
         'key': YOUTUBE_API_KEY,
-        'channelId': CHANNEL_ID,
+        'channelId': channel_id,
         'type': 'video',
         'part': 'snippet',
         'order': 'date',
@@ -173,6 +170,7 @@ def get_videos_of_channel(page=None):
     if not response.ok:
         cprint("Request to Youtube API failed with response :", "red")
         print(response.text)
+        exit(1)
 
     return response.json()
 
@@ -255,7 +253,34 @@ class Video:
 
 ###############################################################################
 
+
 if __name__ == "__main__":
+
+    argparser = argparse.ArgumentParser(
+        parents=[argparser], add_help=False,
+        description="""
+        A simple script to download the all the published captions of all the
+        videos of a channel from YouTube.
+        It will ignore captions made with ASR (Automatic Speech Recognition).
+        You need to set up `client-key.txt` and `client-secrets.json`
+        in order to authenticate successfully with YouTube.
+        """,
+        epilog="""
+        © WTFPL 2017 - YOU ARE FREE TO DO WHAT THE FORK YOU WANT
+        """
+    )
+
+    argparser.add_argument(
+        "--channel", default="UCk-_PEY3iC6DIGJKuoEe9bw",
+        metavar="CHANNEL_ID",
+        help="""
+        Identifier of the YouTube channel publishing the videos for which the
+        captions are to be downloaded.
+        The default channel is the channel of "JEAN-LUC MÉLENCHON", which is
+        the candidate of the INSOUMIS.
+        This option is ignored if you provide the --videos option.
+        """
+    )
 
     argparser.add_argument(
         "--videos",
@@ -270,6 +295,16 @@ if __name__ == "__main__":
         You cannot provide more than 50 video ids to this parameter.
         Remember: YouTube's API has quotas, and using this option is the best
         way to not blow them.
+        """
+    )
+
+    argparser.add_argument(
+        "--extension", dest="extension", default="vtt",
+        choices=['vtt', 'srt', 'sbv'],
+        help="""
+        File extension in which the captions will be downloaded.
+        Available formats : srt for SubRip, sbv for SubViewer, vtt for WebVTT.
+        The default is vtt.
         """
     )
 
@@ -330,15 +365,16 @@ if __name__ == "__main__":
     else:
         print(
             colored("Collecting videos of channel ", "yellow") +
-            colored(CHANNEL_ID, "magenta") +
+            colored(args.channel, "magenta") +
             colored("...", "yellow")
         )
 
-        jsonResponse = get_videos_of_channel()
+        jsonResponse = get_videos_of_channel(args.channel)
         _parse_videos(videos, jsonResponse)
         while 'nextPageToken' in jsonResponse:
-            nextPageToken = jsonResponse['nextPageToken']
-            jsonResponse = get_videos_of_channel(page=nextPageToken)
+            jsonResponse = get_videos_of_channel(
+                args.channel, page=jsonResponse['nextPageToken']
+            )
             _parse_videos(videos, jsonResponse)
 
     print("Found %s video%s." % (
@@ -366,13 +402,13 @@ if __name__ == "__main__":
             caption_lang = caption_data['snippet']['language']
             caption_contents = youtube.captions().download(
                 id=caption_id,
-                tfmt=CAPTIONS_EXTENSION
+                tfmt=args.extension
             ).execute()
             caption_year = video.date.strftime("%Y")
 
             caption_filename = "%s.%s.%s.%s.%s" % (
                 video.date.strftime("%Y-%m-%d"), video.slug,
-                caption_lang, caption_id, CAPTIONS_EXTENSION
+                caption_lang, caption_id, args.extension
             )
 
             caption_path = os.path.join(
