@@ -421,7 +421,7 @@ if __name__ == "__main__":
                 caption_file.write(caption_contents)
 
             captions_count += 1
-            print("  Retrieved %s" % colored(caption_filename, "yellow"))
+            print("  Retrieved %s" % colored(caption_filename, "blue"))
 
     print("Downloaded a grand total of %s caption%s." % (
         colored(captions_count, "yellow"), _s(captions_count)
