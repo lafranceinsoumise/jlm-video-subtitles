@@ -3,12 +3,25 @@
 
 # The purpose of the script is to download all the subtitles files from Youtube
 # Tested with python 2.7 only.
+#
+#
+#
 
-# Install
-# pip install --upgrade colorama termcolor requests
-# pip install --upgrade python-dateutil python-slugify
-# pip install --upgrade google-api-python-client
+# I. Gather your tools.
+#
+# a. Deb-based (Ubuntu)
+#   apt install git python python-pip virtualenv
+# b. Windows
+#   ???
+# c. Other
+#
+# git clone https://github.com/jlm2017/jlm-video-subtitles.git
+# virtualenv venv
+# source venv/bin/activate
+# pip install --upgrade colorama termcolor requests python-dateutil python-slugify google-api-python-client
 
+# II. Pay a visit to the landlord of the forest, on your way there.
+#
 # How to get a Google API Key and OAuth2 credentials:
 # 1) Go to https://console.developers.google.com
 # 2) Create a project, eg. "JLM Video Captions"
@@ -18,6 +31,14 @@
 # 6) Create an OAuth2 Client Id
 # 7) Copy config/client-secrets.json.dist to config/client-secrets.json
 # 8) Fill client_id and client_secret with your OAuth2 credentials
+
+# III. Check the forest from afar
+#
+# python bin/backup.py --help
+
+# IV. Do your gathering round
+#
+# python bin/backup.py
 
 ###############################################################################
 
@@ -44,11 +65,7 @@ from slugify import slugify
 # use Colorama to make Termcolor work on all platforms
 init()
 
-###############################################################################
-
-CAPTIONS_DIRECTORY = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), '..', 'subtitles'
-))
+THIS_DIRECTORY = os.path.abspath(os.path.dirname(__file__))
 
 ###############################################################################
 
@@ -309,6 +326,15 @@ if __name__ == "__main__":
     )
 
     argparser.add_argument(
+        "--directory", dest="data_directory", default="../subtitles",
+        help="""
+        The directory where the captions are or where you want them to be.
+        This is either an absolute path (when starting with /),
+        or relative to the directory where this python script is : '%s'.
+        """ % THIS_DIRECTORY
+    )
+
+    argparser.add_argument(
         "-?", "-h", "--help", dest="help", action="store_true",
         help="Display this documentation and exit."
     )
@@ -318,6 +344,13 @@ if __name__ == "__main__":
     if args.help:
         argparser.print_help()
         argparser.exit(0)
+
+    if args.data_directory.startswith('/'):
+        captions_directory = args.data_directory
+    else:
+        captions_directory = os.path.abspath(os.path.join(
+            THIS_DIRECTORY, args.data_directory
+        ))
 
     cprint("Authenticating with YouTube...", "yellow")
 
@@ -430,7 +463,7 @@ if __name__ == "__main__":
 
             caption_year = video.date.strftime("%Y")
             caption_path = os.path.join(
-                CAPTIONS_DIRECTORY, caption_year, caption_filename
+                captions_directory, caption_year, caption_filename
             )
 
             if not os.path.exists(os.path.dirname(caption_path)):
