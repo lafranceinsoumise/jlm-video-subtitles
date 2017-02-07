@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-
-
+# virtualenv = suit up !
 source venv/bin/activate
 
-python bin/backup.py $@
+# go fishing
+python bin/youtube.py --action download $@

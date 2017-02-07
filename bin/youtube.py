@@ -34,11 +34,11 @@
 
 # III. Check the forest from afar
 #
-# python bin/backup.py --help
+# python bin/youtube.py --help
 
 # IV. Do your gathering round
 #
-# python bin/backup.py
+# python bin/youtube.py
 
 ###############################################################################
 
@@ -165,6 +165,18 @@ def get_authenticated_service(_args):
             doc, http=credentials.authorize(httplib2.Http())
         )
 
+
+def upload_caption(_youtube, _id, _file):
+    return _youtube.captions().update(
+        part="id",
+        body=dict(
+            id=_id
+        ),
+        media_body=_file,
+        media_mime_type='test/vtt'
+    ).execute()
+
+
 ###############################################################################
 
 
@@ -176,7 +188,7 @@ def get_videos_of_channel(channel_id, page=None):
         'type': 'video',
         'part': 'snippet',
         'order': 'date',
-        'maxResults': '50',  # 50 is the highest authorized value
+        'maxResults': '50',  # 50 is the highest authorized value in 2017
     }
 
     if page is not None:
@@ -248,6 +260,21 @@ def get_captions_for_video(video_id):
 #     return response
 
 
+###############################################################################
+
+def get_caption_file_by_id(_id, _dir, _ext):
+    for dirpath, dirnames, filenames in os.walk(_dir):
+        for name in filenames:
+            if name.endswith(_ext):
+                caption = Caption.from_file(os.path.join(dirpath, name))
+                caption.filename = name
+                if caption.id == _id:
+                    return caption
+    raise Exception("Found no caption for id %s" % _id)
+
+
+# MODEL #######################################################################
+
 class Video:
 
     def __init__(self, yid, title, date):
@@ -267,6 +294,37 @@ class Video:
     def slug(self):
         return slugify(self.title)
 
+
+class Caption:
+
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    @staticmethod
+    def from_file(filepath):
+        metas = {}
+        regex = re.compile("(\w+): +(.+)")
+        with open(filepath, "r") as open_file:
+            line = open_file.readline()
+            while line and line.strip():  # stop at the first blank line
+                line = open_file.readline()  # top position = skip WebVTT
+                matches = re.match(regex, line)
+                if matches:
+                    metas[matches.group(1)] = matches.group(2)
+
+        return Caption(
+            filepath=filepath,
+            id=metas['Caption'],
+            language=metas['Language'],
+            modified_at=dateutil.parser.parse(metas['LastUpdated'])
+        )
+
+    @property
+    def id(self):
+        if not hasattr(self, 'id'):
+            raise Exception("Caption without ID.")
+        return self.id
 
 ###############################################################################
 
@@ -316,6 +374,16 @@ if __name__ == "__main__":
     )
 
     argparser.add_argument(
+        "--captions",
+        nargs="+",
+        metavar="CAPTION_ID",
+        help="""
+        Identifier(s) of the YouTube caption(s) to upload to youtube.
+        This option is only useful for the upload action.
+        """
+    )
+
+    argparser.add_argument(
         "--extension", dest="extension", default="vtt",
         choices=['vtt', 'srt', 'sbv'],
         help="""
@@ -335,13 +403,23 @@ if __name__ == "__main__":
     )
 
     argparser.add_argument(
+        "--action", dest="action", default="help",
+        choices=['help', 'download', 'upload'],
+        help="""
+        help : Show this help and exit.
+        download : Download the caption files from youtube.
+        upload : Upload the
+        """
+    )
+
+    argparser.add_argument(
         "-?", "-h", "--help", dest="help", action="store_true",
         help="Display this documentation and exit."
     )
 
     args = argparser.parse_args()
 
-    if args.help:
+    if args.help or args.action == 'help':
         argparser.print_help()
         argparser.exit(0)
 
@@ -352,9 +430,55 @@ if __name__ == "__main__":
             THIS_DIRECTORY, args.data_directory
         ))
 
+    caption_extension = args.extension
+
     cprint("Authenticating with YouTube...", "yellow")
 
     youtube = get_authenticated_service(args)
+
+    # ACTION = UPLOAD #########################################################
+
+    if args.action == 'upload':
+        raise NotImplementedError("Work in progress...")
+
+        # Logic
+        # -----
+        # check last publication date
+        # fixme
+        # if not different from stored
+        # fixme
+        # then actually upload
+        if not args.captions:
+            cprint("For the upload action,\n"
+                   "You must provide caption(s) YouTube id(s) "
+                   "in the --captions option.", "red")
+            exit(1)
+
+        caption_id = args.captions[0]
+
+        caption = get_caption_file_by_id(caption_id, captions_directory, caption_extension)
+
+        print("Uploading changes to caption %s"
+              % colored(caption.filename, "yellow"))
+
+        # googleapiclient.errors.HttpError: HttpError 403
+        # when requesting
+        # https://www.googleapis.com/upload/youtube/v3/captions?uploadType=multipart&alt=json&part=id
+        # returned
+        #   The permissions associated with the request are not sufficient
+        #   to update the caption track.
+        #   The request might not be properly authorized.
+        #
+        # fixme
+        #
+        # T_T
+
+        upload_caption(youtube, caption.id, caption.filepath)
+
+        cprint("Done!", "green")
+        exit(0)
+
+    # ACTION = DOWNLOAD #######################################################
 
     def _parse_videos(_videos, _json):
         for video_data in _json['items']:
@@ -435,7 +559,7 @@ if __name__ == "__main__":
             caption_lang = caption_data['snippet']['language']
             caption_contents = youtube.captions().download(
                 id=caption_id,
-                tfmt=args.extension
+                tfmt=caption_extension
             ).execute().decode('utf-8')
 
             # YouTube writes comments on the first three lines of the VTT file:
@@ -444,7 +568,7 @@ if __name__ == "__main__":
             # Language: fr
             #
             # So we're going to append our metadata to these comments.
-            if args.extension == 'vtt':
+            if caption_extension == 'vtt':
                 caption_lines = caption_contents.split("\n")
                 caption_contents_header = caption_lines[0:3]
                 caption_contents_rest = caption_lines[3:]
@@ -458,7 +582,7 @@ if __name__ == "__main__":
 
             caption_filename = "%s.%s.%s.%s.%s" % (
                 video.date.strftime("%Y-%m-%d"), video.slug,
-                caption_lang, caption_id, args.extension
+                caption_lang, caption_id, caption_extension
             )
 
             caption_year = video.date.strftime("%Y")
@@ -479,3 +603,4 @@ if __name__ == "__main__":
     ))
 
     cprint("Done!", "green")
+    exit(0)
