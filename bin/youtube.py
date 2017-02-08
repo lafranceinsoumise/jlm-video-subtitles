@@ -308,10 +308,10 @@ class Caption:
         with open(filepath, "r") as open_file:
             line = open_file.readline()
             while line and line.strip():  # stop at the first blank line
-                line = open_file.readline()  # top position = skip WebVTT
+                line = open_file.readline()  # also, skip "WebVTT"
                 matches = re.match(regex, line)
                 if matches:
-                    metas[matches.group(1)] = matches.group(2)
+                    metas[matches.group(1).strip()] = matches.group(2).strip()
 
         return Caption(
             filepath=filepath,
@@ -439,7 +439,7 @@ if __name__ == "__main__":
     # ACTION = UPLOAD #########################################################
 
     if args.action == 'upload':
-        raise NotImplementedError("Work in progress...")
+        raise NotImplementedError("Permissions required ! Work in progress...")
 
         # Logic
         # -----
