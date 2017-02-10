@@ -7,8 +7,10 @@ Nous utilisons principalement les projets de Github pour nous organiser :
 
 - [VUE D'ENSEMBLE DES SOUS-TITRES FRANÇAIS](https://github.com/jlm2017/jlm-video-subtitles/projects/2)
 - [VUE D'ENSEMBLE DES SOUS-TITRES ANGLAIS](https://github.com/jlm2017/jlm-video-subtitles/projects/1)
-
-
+- [VUE D'ENSEMBLE DES SOUS-TITRES ESPAGNOL](https://github.com/jlm2017/jlm-video-subtitles/projects/7)
+- [VUE D'ENSEMBLE DES SOUS-TITRES PORTUGAIS](https://github.com/jlm2017/jlm-video-subtitles/projects/8)
+- [VUE D'ENSEMBLE DES SOUS-TITRES ALLEMAND](https://github.com/jlm2017/jlm-video-subtitles/projects/9)
+- [VUE D'ENSEMBLE DES SOUS-TITRES CHINOIS](https://github.com/jlm2017/jlm-video-subtitles/projects/10)
 
 # Comment vous impliquer
 
@@ -32,7 +34,13 @@ Nous utilisons principalement les projets de Github pour nous organiser :
 
 #### Quelle vidéo choisir ?
 
-Rendez vous dans un des deux tableaux de gestion des sous-titres ([français](https://github.com/jlm2017/jlm-video-subtitles/projects/2) ou [anglais](https://github.com/jlm2017/jlm-video-subtitles/projects/1))
+Rendez vous dans un des tableaux de gestion des sous-titres :
+- [français](https://github.com/jlm2017/jlm-video-subtitles/projects/2)
+- [anglais](https://github.com/jlm2017/jlm-video-subtitles/projects/1)
+- [espagnol](https://github.com/jlm2017/jlm-video-subtitles/projects/7)
+- [portugais](https://github.com/jlm2017/jlm-video-subtitles/projects/8)
+- [allemand](https://github.com/jlm2017/jlm-video-subtitles/projects/9)
+- [chinois](https://github.com/jlm2017/jlm-video-subtitles/projects/10)
 
 Si certaines issues (dont le titre contient [subtitles]) sont listées dans la première colonne (`sous-titres requis`) et **ne portent pas** le label `Process: Someone is working on this issue`, vous pouvez en choisir une et vous y assigner. 
 
@@ -40,13 +48,24 @@ Si certaines issues (dont le titre contient [subtitles]) sont listées dans la p
 - Créez une issue (https://github.com/jlm2017/jlm-video-subtitles/issues/new) en utilisant ce modèle : https://github.com/jlm2017/jlm-video-subtitles/issues/1
 - Assignez-vous à cette issue
 - Ajoutez les labels appropriés à l'issue en question
-- Rendez vous sur la page de projet correspondant ([français](https://github.com/jlm2017/jlm-video-subtitles/projects/2) ou [anglais](https://github.com/jlm2017/jlm-video-subtitles/projects/1))
+- Rendez vous sur la page de projet correspondant :
+  - [français](https://github.com/jlm2017/jlm-video-subtitles/projects/2)
+  - [anglais](https://github.com/jlm2017/jlm-video-subtitles/projects/1)
+  - [espagnol](https://github.com/jlm2017/jlm-video-subtitles/projects/7)
+  - [portugais](https://github.com/jlm2017/jlm-video-subtitles/projects/8)
+  - [allemand](https://github.com/jlm2017/jlm-video-subtitles/projects/9)
+  - [chinois](https://github.com/jlm2017/jlm-video-subtitles/projects/10)
 - Cliquez sur Add cards, et glissez-déposez votre issue dans la colonne qui correspond à l'état d'avancement des sous-titres pour celle ci
+
+![Aperçu du lien Add cards](http://img15.hostingpics.net/pics/125279Capturedcran20170109221602.png)
+
+**/!\ Vous ne pouvez faire ça que si vous faites partie des contributeurs du projet !** Donc si vous n'y arrivez pas, signalez-le nous, on vous y ajoutera.
 - C'est tout !
 
 
 
 #### Écrire des sous-titres
+**/!\ Vous ne pouvez faire ça que si vous faites partie des contributeurs du projet !** Donc si vous n'y arrivez pas, signalez-le nous, on vous y ajoutera. Si vous voulez participer avant d'avoir les droits, postez un commentaire dans l'issue en demandant qu'on applique les labels pour vous :)
 
 Quand vous commencez à écrire des sous-titres, déplacez la carte de la première colonne (`sous-titres requis`) à la seconde (`sous-titres en cours de rédaction`). Enlevez le label `Process: [0] Awaiting subtitles` et remplacez-le par `Process: [1] Writing in progress`. Ajoutez le label `Process: Someone is working on this issue`, qui signale que vous vous occupez des sous-titres.
 
@@ -57,6 +76,7 @@ Quand vous commencez à écrire des sous-titres, déplacez la carte de la premi�
 
 
 #### Sous-titres rédigés, attente de la première validation
+**/!\ Vous ne pouvez faire ça que si vous faites partie des contributeurs du projet !** Donc si vous n'y arrivez pas, signalez-le nous, on vous y ajoutera. Si vous voulez participer avant d'avoir les droits, postez un commentaire dans l'issue en demandant qu'on applique les labels pour vous :)
 
 Une fois que la rédaction des sous-titre est terminée, déplacez votre issue de la seconde colonne (`sous-titres en cours de rédaction`) à la troisième colonne (`prêt pour correction (1) ou correction (1) en cours`). Signalez que vous avez fini de rédiger les sous-titres en commentant votre issue. Rajoutez à votre issue le label `Process: [2] Ready for review (1)`.
 
@@ -74,6 +94,8 @@ Les issues concernant des vidéos (elles contiennent [subtitles] dans leur titre
 
 Choisissez-en une et commentez-la pour signalez que vous commencez la relecture. Remplacez le label `Process: [2] Ready for review (1)` par le label `Process: [3] Review (1) in progress`. Ajoutez le label `Process: Someone is working on this issue`, qui signale que vous vous occupez des sous-titres.
 
+**/!\ Vous ne pouvez faire ça que si vous faites partie des contributeurs du projet !** Donc si vous n'y arrivez pas, signalez-le nous, on vous y ajoutera. Si vous voulez participer avant d'avoir les droits, postez un commentaire dans l'issue en demandant qu'on applique les labels pour vous :)
+
 **/!\** Il se peut que la relecture prenne du temps, et ne puisse pas être réalisée en une seule fois. Pensez donc systématiquement sur YouTube à valider vos sous-titres afin que d'autres personnes puissent les poursuivre si vous n'en n'avez pas le temps !
 
 *Si vous arrêtez votre rédaction, enlevez le label `Process: Someone is working on this issue`. Vous pouvez également poster un commentaire sur votre issue pour dire que vous interrompez votre travail.*
@@ -81,6 +103,7 @@ Choisissez-en une et commentez-la pour signalez que vous commencez la relecture.
 
 
 #### Première validation effectuée, attente de la seconde validation
+**/!\ Vous ne pouvez faire ça que si vous faites partie des contributeurs du projet !** Donc si vous n'y arrivez pas, signalez-le nous, on vous y ajoutera. Si vous voulez participer avant d'avoir les droits, postez un commentaire dans l'issue en demandant qu'on applique les labels pour vous :)
 
 Une fois que la correction des sous-titre est terminée, déplacez l'issue de la troisième colonne (`prêt pour correction (1) ou correction (1) en cours`) à la quatrième colonne (`prêt pour correction (2) ou correction (2) en cours`). Signalez que vous avez fini de corriger les sous-titres en commentant votre issue. Rajoutez à votre issue le label `Process: [4] Ready for review (2)`.  Retirez le label `Process: Someone is working on this issue`.
 
@@ -104,6 +127,8 @@ Les issues concernant des vidéos (elles contiennent [subtitles] dans leur titre
 
 Choisissez-en une et commentez-la pour signalez que vous commencez la relecture. Remplacez le label `Process: [4] Ready for review (2)` par le label `Process: [5] Review (2) in progress`. Ajoutez le label `Process: Someone is working on this issue`, qui signale que vous vous occupez des sous-titres.
 
+**/!\ Vous ne pouvez faire ça que si vous faites partie des contributeurs du projet !** Donc si vous n'y arrivez pas, signalez-le nous, on vous y ajoutera. Si vous voulez participer avant d'avoir les droits, postez un commentaire dans l'issue en demandant qu'on applique les labels pour vous :)
+
 **/!\**
 Il se peut que la relecture prenne du temps, et ne puisse pas être réalisée en une seule fois.
 Pensez donc systématiquement sur YouTube à valider vos sous-titres afin que d'autres personnes puissent les poursuivre si vous n'en n'avez pas le temps !
@@ -117,5 +142,7 @@ Pensez donc systématiquement sur YouTube à valider vos sous-titres afin que d'
 Une fois la seconde correction validée, les sous-titres seront mis en ligne directement, et seront visibles par le public de la chaîne de Jean-Luc Mélenchon.
 
 Déplacez l'issue de la quatrième colonne (`prêt pour correction (2) ou correction (2) en cours`) à la cinquième colonne (`validés et en ligne`). Remplacez le label `Process: [5] Review (2) in progress` par le label `Process: [6] Approved`. Retirez le label `Process: Someone is working on this issue`. Vous pouvez commenter l'issue pour signaler que les sous-titres sont en ligne, et pourquoi pas, remercier les participants !
+
+**/!\ Vous ne pouvez faire ça que si vous faites partie des contributeurs du projet !** Donc si vous n'y arrivez pas, signalez-le nous, on vous y ajoutera. Si vous voulez participer avant d'avoir les droits, postez un commentaire dans l'issue en demandant qu'on applique les labels pour vous :)
 
 ![Seal of Approval](http://img4.hostingpics.net/pics/925034sealofapproval.png)
