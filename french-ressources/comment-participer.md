@@ -1,4 +1,4 @@
-Vous êtes ici : [Accueil](../README.md) > Ressources en français > [Comment vous impliquer dans le projet](comment-participer.md)
+Vous êtes ici : [Accueil](../README.md) > Ressources en français > [Procédure de rédaction des sous-titres](comment-participer.md)
 
 
 # Liens importants
