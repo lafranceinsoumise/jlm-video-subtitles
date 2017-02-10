@@ -5,7 +5,7 @@ Vous trouverez ci-dessous les différentes ressources utiles si vous souhaitez p
 ## Ressources
 - Documentation en français :
   - [Mode d'emploi de GitHub](french-ressources/comment-utiliser-github.md)
-  - [Comment vous impliquer dans le projet](french-ressources/comment-participer.md)
+  - [Procédure de rédaction des sous-titres](french-ressources/comment-participer.md)
 - FAQ : https://github.com/jlm2017/jlm-video-subtitles/issues/19
 - Présentation des membres : https://github.com/jlm2017/jlm-video-subtitles/issues/17
 - Tableaux de gestion des sous-titrages 
@@ -23,7 +23,7 @@ Management of video subtitles for Mr Mélenchon's videos.
 ## Ressources
 - English documentation:
   - [GitHub user manual](english-ressources/how-to-use-github.md)
-  - [How to involve yourself](english-ressources/how-to-involve-yourself.md)
+  - [Subtitling procedure](english-ressources/how-to-involve-yourself.md)
 - FAQ : https://github.com/jlm2017/jlm-video-subtitles/issues/19
 - Members presentation : https://github.com/jlm2017/jlm-video-subtitles/issues/17
 - Subtitles management boards: 
