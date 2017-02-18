@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # todo: (help wanted) detect OS and install system packages accordingly
-sudo apt install git pyth on python-pip virtualenv  # deb
+sudo apt install git python python-pip virtualenv  # deb
 
 virtualenv venv
 source venv/bin/activate
