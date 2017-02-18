@@ -1,11 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # coding=utf-8
 
 # The purpose of the script is to download all the subtitles files from Youtube
 # Tested with python 2.7 only.
-#
-#
-#
 
 # I. Gather your tools.
 #
@@ -13,7 +10,6 @@
 #   apt install git python python-pip virtualenv
 # b. Windows
 #   ???
-# c. Other
 #
 # git clone https://github.com/jlm2017/jlm-video-subtitles.git
 # virtualenv venv
@@ -266,10 +262,10 @@ def get_caption_file_by_id(_id, _dir, _ext):
     for dirpath, dirnames, filenames in os.walk(_dir):
         for name in filenames:
             if name.endswith(_ext):
-                caption = Caption.from_file(os.path.join(dirpath, name))
-                caption.filename = name
-                if caption.id == _id:
-                    return caption
+                _caption = Caption.from_file(os.path.join(dirpath, name))
+                _caption.filename = name
+                if _caption.id == _id:
+                    return _caption
     raise Exception("Found no caption for id %s" % _id)
 
 
