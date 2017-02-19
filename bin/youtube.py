@@ -6,15 +6,7 @@
 
 # I. Gather your tools.
 #
-# a. Deb-based (Ubuntu)
-#   apt install git python python-pip virtualenv
-# b. Windows
-#   ???
-#
-# git clone https://github.com/jlm2017/jlm-video-subtitles.git
-# virtualenv venv
-# source venv/bin/activate
-# pip install --upgrade colorama termcolor requests python-dateutil python-slugify google-api-python-client
+# See setup.sh
 
 # II. Pay a visit to the landlord of the forest, on your way there.
 #
@@ -30,11 +22,11 @@
 
 # III. Check the forest from afar
 #
-# python bin/youtube.py --help
+# bin/youtube.py --help
 
 # IV. Do your gathering round
 #
-# python bin/youtube.py
+# bin/youtube.py
 
 ###############################################################################
 

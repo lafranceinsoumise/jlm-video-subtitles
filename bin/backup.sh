@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-# virtualenv = suit up !
 source venv/bin/activate
 
-# go fishing
+if [ $? -ne 0 ] ; then
+  echo -e "Set up a virtualenv first. See 'setup.sh'."
+  exit 1
+fi
+
 python bin/youtube.py --action download $@
