@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 
-# todo: (help wanted) detect OS and install system packages accordingly
-sudo apt install git python python-pip virtualenv  # deb
+if cat /etc/*release | grep ^NAME | grep Ubuntu ; then
+    sudo apt install git python python-pip virtualenv
+elif cat /etc/*release | grep ^NAME | grep Debian ; then
+    sudo aptitude install git python python-pip virtualenv
+fi  # ... add your OS here
 
 virtualenv venv
 source venv/bin/activate
 pip install --upgrade colorama termcolor requests python-dateutil \
                       python-slugify google-api-python-client
+
+# If "InsecurePlatformWarning: A true SSLContext object is not available."
+# pip install requests[security]
 
 echo -e "Done."
