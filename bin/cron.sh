@@ -7,7 +7,7 @@
 # A script to run as a scheduled CRON task, every day at 23:50
 # 50 23 * * * web bin/cron.sh > /dev/null 2> /dev/null
 
-today="$(date +'%Y-%m-%d')"
+today="$(date +'%A %d %B %Y')"
 title="JLM Captions Backup"
 email="antoine.goutenoir@gmail.com"
 
@@ -31,7 +31,7 @@ fi
 
 git add subtitles
 
-git commit -m "Back up changes of ${today}."
+git commit -m "Sauvegarde du ${today}."
 
 git push origin master &> git-push.log
 
