@@ -5,6 +5,7 @@
 venv*
 
 # OAuth2 Credentials
+config/github-key.txt
 config/client-key.txt
 config/client-secrets.json
 config/credentials-oauth2.json
