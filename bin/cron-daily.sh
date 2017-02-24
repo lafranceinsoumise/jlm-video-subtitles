@@ -5,7 +5,7 @@
 # Look at backup.sh or youtube.py instead.
 
 # A script to run as a scheduled CRON task, every day at 23:50
-# 50 23 * * * web bin/cron.sh > /dev/null 2> /dev/null
+# 50 23 * * * web bin/cron-daily.sh > /dev/null 2> /dev/null
 
 today="$(date +'%A %d %B %Y')"
 title="JLM Captions Backup"
@@ -20,7 +20,7 @@ source venv/bin/activate
 # git fetch origin master
 # git reset --hard FETCH_HEAD
 # git clean -df
-# ... actually, do neither, as too many people have access to the repo.
+# Actually, do neither, as too many people have write access to the repo.
 
 python bin/youtube.py --action download &> download.log
 
