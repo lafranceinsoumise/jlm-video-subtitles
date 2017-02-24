@@ -35,6 +35,8 @@ import re
 import sys
 import datetime
 import dateutil.parser
+import isodate
+import strict_rfc3339
 import argparse
 import httplib2
 
@@ -49,11 +51,13 @@ from pprint import pprint
 from colorama import init
 from termcolor import colored, cprint
 from slugify import slugify
+from github import Github, Requester
 
 # use Colorama to make Termcolor work on all platforms
 init()
 
 THIS_DIRECTORY = os.path.abspath(os.path.dirname(__file__))
+
 
 ###############################################################################
 
@@ -105,6 +109,7 @@ For more information about the client-secrets.json file format, please visit:
 https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 """ % CLIENT_SECRETS_FILE
 
+
 ###############################################################################
 
 YOUTUBE_API_KEY_FILE = os.path.abspath(os.path.join(
@@ -112,7 +117,7 @@ YOUTUBE_API_KEY_FILE = os.path.abspath(os.path.join(
 ))
 
 MISSING_API_KEY_FILE = """
-ERROR : Api key missing.
+ERROR : Google API key missing.
 
 How to get a Google API Key and OAuth2 credentials:
   1) Go to https://console.developers.google.com
@@ -128,6 +133,30 @@ try:
         YOUTUBE_API_KEY = api_key_file.read().strip()
 except IOError:
     cprint(MISSING_API_KEY_FILE, "red")
+    exit(1)
+
+
+###############################################################################
+
+GITHUB_API_KEY_FILE = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), '..', 'config', 'github-key.txt'
+))
+
+MISSING_GITHUB_API_KEY_FILE = """
+ERROR : Github API key missing.
+
+How to get a Github API Key:
+  1) Go to https://github.com/settings/tokens
+  2) Create a new key
+  3) Copy it to %s
+""" % GITHUB_API_KEY_FILE
+
+GITHUB_API_KEY = ""
+try:
+    with open(GITHUB_API_KEY_FILE) as api_key_file:
+        GITHUB_API_KEY = api_key_file.read().strip()
+except IOError:
+    cprint(MISSING_GITHUB_API_KEY_FILE, "red")
     exit(1)
 
 ###############################################################################
@@ -167,8 +196,28 @@ def upload_caption(_youtube, _id, _file):
 
 ###############################################################################
 
+def parse_videos_from_json(_json):
+    _videos = []
+    for video_data in _json['items']:
+        _id = video_data['id']
+        if type(_id) is dict:
+            _id = _id['videoId']
+        _duration = None
+        if 'contentDetails' in video_data:
+            _duration = video_data['contentDetails']['duration']
+        _videos.append(Video(
+            yid=_id,
+            title=video_data['snippet']['title'],
+            date=video_data['snippet']['publishedAt'],
+            duration=_duration
+        ))
+    return _videos
 
-def get_videos_of_channel(channel_id, page=None):
+
+def get_latest_videos_of_channel(channel_id, cap=10, since_minutes_ago=120):
+    assert cap < 50  # 50 is the highest authorized value in 2017
+    t = datetime.datetime.now() - datetime.timedelta(minutes=since_minutes_ago)
+    t = strict_rfc3339.timestamp_to_rfc3339_utcoffset(int(t.strftime("%s")))
     url = 'https://www.googleapis.com/youtube/v3/search'
     parameters = {
         'key': YOUTUBE_API_KEY,
@@ -176,7 +225,29 @@ def get_videos_of_channel(channel_id, page=None):
         'type': 'video',
         'part': 'snippet',
         'order': 'date',
-        'maxResults': '50',  # 50 is the highest authorized value in 2017
+        'publishedAfter': t,  # RFC 3339 with trailing Z, or it will not work
+        'maxResults': '%s' % cap,
+    }
+
+    response = get(url, params=parameters)
+
+    if not response.ok:
+        cprint("Request to Youtube API failed with response :", "red")
+        print(response.text)
+        exit(1)
+
+    return response.json()
+
+
+def get_videos_of_channel(channel_id, page=None, cap=50):
+    url = 'https://www.googleapis.com/youtube/v3/search'
+    parameters = {
+        'key': YOUTUBE_API_KEY,
+        'channelId': channel_id,
+        'type': 'video',
+        'part': 'snippet',
+        'order': 'date',
+        'maxResults': '%s' % cap,  # 50 is the highest authorized value in 2017
     }
 
     if page is not None:
@@ -197,7 +268,7 @@ def get_videos(video_ids):
     parameters = {
         'key': YOUTUBE_API_KEY,
         'id': ','.join(video_ids),
-        'part': 'snippet',
+        'part': 'snippet,contentDetails',
         'maxResults': '50',
     }
 
@@ -250,6 +321,14 @@ def get_captions_for_video(video_id):
 
 ###############################################################################
 
+def _s(int_or_list):
+    if type(int_or_list) is list:
+        int_or_list = len(int_or_list)
+    return '' if int_or_list == 1 else 's'
+
+
+###############################################################################
+
 def get_caption_file_by_id(_id, _dir, _ext):
     for dirpath, dirnames, filenames in os.walk(_dir):
         for name in filenames:
@@ -265,15 +344,20 @@ def get_caption_file_by_id(_id, _dir, _ext):
 
 class Video:
 
-    def __init__(self, yid, title, date):
+    def __init__(self, yid, title, date, duration=None):
         """
         :param yid: Youtube Id
         :param title: Unicode
         :param date: RFC 3339
+        :param duration: ISO 8601 (PT prefix)
         """
         self.yid = yid
         self.title = title
         self.date = dateutil.parser.parse(date)
+        if duration is not None:
+            self.duration = isodate.parse_duration(duration)
+        else:
+            self.duration = None
 
     def __str__(self):
         return "%s - %s" % (self.yid, self.title)
@@ -391,12 +475,21 @@ if __name__ == "__main__":
     )
 
     argparser.add_argument(
+        "--repository", default="jlm2017/jlm-video-subtitles",
+        metavar="OWNER/REPO",
+        help="""
+        Github repository in which to create issues during the 'github' action.
+        """
+    )
+
+    argparser.add_argument(
         "--action", dest="action", default="help",
-        choices=['help', 'download', 'upload'],
+        choices=['help', 'download', 'upload', 'github'],
         help="""
         help : Show this help and exit.
-        download : Download the caption files from youtube.
-        upload : Upload the
+        download : Download the caption files from youtube.\n
+        upload : WIP\n
+        github : Create relevant issues for each caption on github.
         """
     )
 
@@ -466,23 +559,139 @@ if __name__ == "__main__":
         cprint("Done!", "green")
         exit(0)
 
+    # ACTION = GITHUB #########################################################
+
+    # Create an issue on github for each new video.
+    # - Video must not have an issue already
+    # - Only check for videos published in the last 24h (for performance)
+
+    if args.action == 'github':
+
+        languages = [
+            {
+                'short': 'fr',
+                'label': 'Language: French',
+                'column': '213698',
+                'issue': u"""
+Titre | {video.title}
+----- | -----
+Durée | {video.duration}
+Langue | Français
+Liens | [VIDÉO](https://www.youtube.com/watch?v={video.yid}) - [ÉDITEUR](https://www.youtube.com/timedtext_editor?v={video.yid}&tab=captions&bl=vmp&action_mde_edit_form=1&lang=fr&ui=hd)
+"""
+            },
+            {
+                'short': 'en',
+                'label': 'Language: English',
+                'column': '206437',
+                'issue': u"""
+Title | {video.title}
+----- | -----
+Duration | {video.duration}
+Language | English
+Links | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https://www.youtube.com/timedtext_editor?v={video.yid}&tab=captions&bl=vmp&action_mde_edit_form=1&lang=en&ui=hd)
+"""
+            },
+            {
+                'short': 'de',
+                'label': 'Language: German',
+                'column': '373399',
+                'issue': u"""
+Titel | {video.title}
+----- | -----
+Dauer | {video.duration}
+Sprache | English
+Verweise | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https://www.youtube.com/timedtext_editor?v={video.yid}&tab=captions&bl=vmp&action_mde_edit_form=1&lang=en&ui=hd)
+"""
+            }
+        ]
+
+        print("Collecting issues of repository %s..."
+              % colored(args.repository, "yellow"))
+
+        gh = Github(GITHUB_API_KEY)
+        repo = gh.get_repo(args.repository)
+
+        # The Projects API is still in development
+        # - https://developer.github.com/v3/projects
+        # - It's not supported by the python lib yet
+        # - We need to provide a special "Accept" header
+        # So, we hack in our own support ; it's dirty but it works.
+        # Well, it would work, but we need repository admin privileges T_T
+        rq = Requester.Requester(
+            GITHUB_API_KEY, None, "https://api.github.com", 10, None, None,
+            'PyGithub/Python', 30, False
+        )
+
+        # Useful to get the IDs of the Projects/Columns
+        # headers, data = rq.requestJsonAndCheck(
+        #     "GET",
+        #     "/repos/%s/projects" % args.repository,
+        #     None,
+        #     { "Accept": "application/vnd.github.inertia-preview+json" }
+        # )
+        # pprint(data)
+
+        # headers, data = rq.requestJsonAndCheck(
+        #     "POST",
+        #     "/projects/columns/%s/cards" % '213698',
+        #     {
+        #         'content_id': '215',
+        #         'content_type': 'Issue'
+        #     },
+        #     {
+        #         "Accept": "application/vnd.github.inertia-preview+json"
+        #     }
+        # )
+        #
+        # print(headers)
+        # print(data)
+        # exit(0)
+
+        issues = repo.get_issues()
+        labels = {}
+        for language in languages:
+            labels[language['short']] = repo.get_label(language['label'])
+        label_start = repo.get_label('Process: [0] Awaiting subtitles')
+
+        print("Collecting latest videos of channel %s..."
+              % colored(args.channel, "yellow"))
+
+        jsonResponse = get_latest_videos_of_channel(args.channel)
+        videos = parse_videos_from_json(jsonResponse)
+        ids = [video.yid for video in videos]
+
+        jsonResponse = get_videos(ids)
+        videos = parse_videos_from_json(jsonResponse)
+
+        for video in videos:
+            for language in languages:
+                issue_title = "[subtitles] [%s] %s" % \
+                              (language['short'], video.title)
+
+                print("Looking for issue %s..." % colored(issue_title, "yellow"))
+
+                found = False
+                for issue in issues:
+                    if issue.title == issue_title:
+                        found = True
+                        break
+                if found:
+                    print("  Found existing issue. Skipping...")
+                else:
+                    print("  Issue not found. Creating it now...")
+                    issue_body = language['issue'].format(video=video)
+                    repo.create_issue(issue_title, body=issue_body, labels=[
+                        labels[language['short']], label_start
+                    ])
+
+        if 0 == len(videos):
+            print("No recent videos were found.")
+
+        cprint("Done!", "green")
+        exit(0)
+
     # ACTION = DOWNLOAD #######################################################
-
-    def _parse_videos(_videos, _json):
-        for video_data in _json['items']:
-            _id = video_data['id']
-            if type(_id) is dict:
-                _id = _id['videoId']
-            _videos.append(Video(
-                yid=_id,
-                title=video_data['snippet']['title'],
-                date=video_data['snippet']['publishedAt']
-            ))
-
-    def _s(int_or_list):
-        if type(int_or_list) is list:
-            int_or_list = len(int_or_list)
-        return '' if int_or_list == 1 else 's'
 
     videos = []
     if args.videos:
@@ -506,7 +715,7 @@ if __name__ == "__main__":
                     jsonResponse['pageInfo']['totalResults'], len(args.videos)
                 ), "red")
             exit(1)
-        _parse_videos(videos, jsonResponse)
+        videos.extend(parse_videos_from_json(jsonResponse))
     else:
         print(
             colored("Collecting videos of channel ", "yellow") +
@@ -515,12 +724,12 @@ if __name__ == "__main__":
         )
 
         jsonResponse = get_videos_of_channel(args.channel)
-        _parse_videos(videos, jsonResponse)
+        videos.extend(parse_videos_from_json(jsonResponse))
         while 'nextPageToken' in jsonResponse:
             jsonResponse = get_videos_of_channel(
                 args.channel, page=jsonResponse['nextPageToken']
             )
-            _parse_videos(videos, jsonResponse)
+            videos.extend(parse_videos_from_json(jsonResponse))
 
     print("Found %s video%s." % (
         colored(str(len(videos)), "yellow"), _s(videos)
