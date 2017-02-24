@@ -8,8 +8,9 @@ fi  # ... add your OS here
 
 virtualenv venv
 source venv/bin/activate
-pip install --upgrade colorama termcolor requests python-dateutil \
-                      python-slugify google-api-python-client
+pip install --upgrade colorama termcolor requests \
+                      python-dateutil isodate strict-rfc3339 \
+                      python-slugify google-api-python-client PyGithub
 
 # If "InsecurePlatformWarning: A true SSLContext object is not available."
 # pip install requests[security]
