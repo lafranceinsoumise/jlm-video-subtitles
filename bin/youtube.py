@@ -571,7 +571,7 @@ if __name__ == "__main__":
             {
                 'short': 'fr',
                 'label': 'Language: French',
-                'column': '213698',
+                'column': '398411',
                 'issue': u"""
 Titre | {video.title}
 ----- | -----
@@ -583,7 +583,7 @@ Liens | [VIDÉO](https://www.youtube.com/watch?v={video.yid}) - [ÉDITEUR](https
             {
                 'short': 'en',
                 'label': 'Language: English',
-                'column': '206437',
+                'column': '387590',
                 'issue': u"""
 Title | {video.title}
 ----- | -----
@@ -595,7 +595,7 @@ Links | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https://
             {
                 'short': 'de',
                 'label': 'Language: German',
-                'column': '373399',
+                'column': '654910',
                 'issue': u"""
 Titel | {video.title}
 ----- | -----
@@ -617,38 +617,42 @@ Verweise | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https
         # - It's not supported by the python lib yet
         # - We need to provide a special "Accept" header
         # So, we hack in our own support ; it's dirty but it works.
-        # Well, it would work, but we need repository admin privileges T_T
+        # Be warned : it may break at any moment -_-
+        GITHUB_ACCEPT = "application/vnd.github.inertia-preview+json"
         rq = Requester.Requester(
             GITHUB_API_KEY, None, "https://api.github.com", 10, None, None,
             'PyGithub/Python', 30, False
         )
 
-        # Useful to get the IDs of the Projects/Columns
+        # Useful to get the IDs of the Projects
         # headers, data = rq.requestJsonAndCheck(
         #     "GET",
         #     "/repos/%s/projects" % args.repository,
         #     None,
-        #     { "Accept": "application/vnd.github.inertia-preview+json" }
+        #     {"Accept": GITHUB_ACCEPT}
         # )
         # pprint(data)
 
+        # Useful to get the IDs of the Columns
         # headers, data = rq.requestJsonAndCheck(
-        #     "POST",
-        #     "/projects/columns/%s/cards" % '213698',
-        #     {
-        #         'content_id': '215',
-        #         'content_type': 'Issue'
-        #     },
-        #     {
-        #         "Accept": "application/vnd.github.inertia-preview+json"
-        #     }
+        #     "GET",
+        #     "/projects/%s/columns" % '373399',
+        #     None,
+        #     {"Accept": GITHUB_ACCEPT}
         # )
-        #
-        # print(headers)
-        # print(data)
-        # exit(0)
+        # pprint(data)
+
+        # List cards of a Column
+        # headers, data = rq.requestJsonAndCheck(
+        #     "GET",
+        #     "/projects/columns/%s/cards" % '398411',
+        #     None,
+        #     {"Accept": GITHUB_ACCEPT}
+        # )
+        # pprint(data)
 
         issues = repo.get_issues()
+
         labels = {}
         for language in languages:
             labels[language['short']] = repo.get_label(language['label'])
@@ -669,7 +673,8 @@ Verweise | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https
                 issue_title = "[subtitles] [%s] %s" % \
                               (language['short'], video.title)
 
-                print("Looking for issue %s..." % colored(issue_title, "yellow"))
+                print("Looking for issue %s..."
+                      % colored(issue_title, "yellow"))
 
                 found = False
                 for issue in issues:
@@ -681,9 +686,21 @@ Verweise | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https
                 else:
                     print("  Issue not found. Creating it now...")
                     issue_body = language['issue'].format(video=video)
-                    repo.create_issue(issue_title, body=issue_body, labels=[
+                    issue = repo.create_issue(issue_title, body=issue_body, labels=[
                         labels[language['short']], label_start
                     ])
+                    # Ok, this is a total hack that may break at any point,
+                    # because the Cards API is a dev-preview only.
+                    print("  Creating a card for it as well...")
+                    headers, data = rq.requestJsonAndCheck(
+                        verb="POST",
+                        url="/projects/columns/%s/cards" % language['column'],
+                        input={
+                            'content_id': issue.id,
+                            'content_type': 'Issue'
+                        },
+                        headers={"Accept": GITHUB_ACCEPT}
+                    )
 
         if 0 == len(videos):
             print("No recent videos were found.")
