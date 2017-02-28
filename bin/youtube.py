@@ -226,7 +226,7 @@ def get_latest_videos_of_channel(channel_id, cap=10, since_minutes_ago=120):
         'part': 'snippet',
         'order': 'date',
         'publishedAfter': t,  # RFC 3339 with trailing Z, or it will not work
-        'maxResults': '%s' % cap,
+        'maxResults': '%d' % cap,
     }
 
     response = get(url, params=parameters)
@@ -240,6 +240,7 @@ def get_latest_videos_of_channel(channel_id, cap=10, since_minutes_ago=120):
 
 
 def get_videos_of_channel(channel_id, page=None, cap=50):
+    assert cap < 50  # 50 is the highest authorized value in 2017
     url = 'https://www.googleapis.com/youtube/v3/search'
     parameters = {
         'key': YOUTUBE_API_KEY,
@@ -247,7 +248,7 @@ def get_videos_of_channel(channel_id, page=None, cap=50):
         'type': 'video',
         'part': 'snippet',
         'order': 'date',
-        'maxResults': '%s' % cap,  # 50 is the highest authorized value in 2017
+        'maxResults': '%d' % cap,
     }
 
     if page is not None:
@@ -424,7 +425,7 @@ if __name__ == "__main__":
         Identifier of the YouTube channel publishing the videos for which the
         captions are to be downloaded.
         The default channel is the channel of "JEAN-LUC MÉLENCHON", which is
-        the candidate of the INSOUMIS.
+        the candidate of the "Insoumis".
         This option is ignored if you provide the --videos option.
         """
     )
@@ -579,7 +580,8 @@ Durée | {video.duration}
 Langue | Français
 Liens | [VIDÉO](https://www.youtube.com/watch?v={video.yid}) - [ÉDITEUR](https://www.youtube.com/timedtext_editor?v={video.yid}&tab=captions&bl=vmp&action_mde_edit_form=1&lang=fr&ui=hd)
 """
-            },
+            }
+            ,
             {
                 'short': 'en',
                 'label': 'Language: English',
@@ -591,19 +593,20 @@ Duration | {video.duration}
 Language | English
 Links | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https://www.youtube.com/timedtext_editor?v={video.yid}&tab=captions&bl=vmp&action_mde_edit_form=1&lang=en&ui=hd)
 """
-            },
-            {
-                'short': 'de',
-                'label': 'Language: German',
-                'column': '654910',
-                'issue': u"""
-Titel | {video.title}
------ | -----
-Dauer | {video.duration}
-Sprache | English
-Verweise | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https://www.youtube.com/timedtext_editor?v={video.yid}&tab=captions&bl=vmp&action_mde_edit_form=1&lang=en&ui=hd)
-"""
             }
+#             ,
+#             {
+#                 'short': 'de',
+#                 'label': 'Language: German',
+#                 'column': '654910',
+#                 'issue': u"""
+# Titel | {video.title}
+# ----- | -----
+# Dauer | {video.duration}
+# Sprache | English
+# Verweise | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https://www.youtube.com/timedtext_editor?v={video.yid}&tab=captions&bl=vmp&action_mde_edit_form=1&lang=en&ui=hd)
+# """
+#             }
         ]
 
         print("Collecting issues of repository %s..."
