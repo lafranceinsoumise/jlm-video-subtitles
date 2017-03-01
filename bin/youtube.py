@@ -355,9 +355,6 @@ class Video:
         """
         self.yid = yid
         self.title = title
-        print("TITLE")
-        pprint(title)
-        print(type(title))
         self.date = dateutil.parser.parse(date)
         if duration is not None:
             self.duration = isodate.parse_duration(duration)
