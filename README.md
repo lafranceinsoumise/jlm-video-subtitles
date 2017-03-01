@@ -8,9 +8,9 @@ Vous trouverez ci-dessous les différentes ressources utiles si vous souhaitez p
 ## Ressources
 
 - Documentation en français :
-  - [Mode d'emploi de GitHub](wiki/[FR]-01.-Comment-utiliser-Github)
-  - [Procédure de rédaction des sous-titres](wiki/[FR]-02.-Comment-participer)
-- [FAQ](wiki/[FR]-05.-FAQ)
+  - [Mode d'emploi de GitHub](https://github.com/jlm2017/jlm-video-subtitles/wiki/[FR]-01.-Comment-utiliser-Github)
+  - [Procédure de rédaction des sous-titres](https://github.com/jlm2017/jlm-video-subtitles/wiki/[FR]-02.-Comment-participer)
+- [FAQ](https://github.com/jlm2017/jlm-video-subtitles/wiki/[FR]-05.-FAQ)
 - Présentation des membres : https://github.com/jlm2017/jlm-video-subtitles/issues/17
 - Tableaux de gestion des sous-titrages 
   - français : https://github.com/jlm2017/jlm-video-subtitles/projects/2
