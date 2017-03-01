@@ -215,7 +215,7 @@ def parse_videos_from_json(_json):
 
 
 def get_latest_videos_of_channel(channel_id, cap=10, since_minutes_ago=120):
-    assert cap < 50  # 50 is the highest authorized value in 2017
+    assert cap < 51  # 50 is the highest authorized value in 2017
     t = datetime.datetime.now() - datetime.timedelta(minutes=since_minutes_ago)
     t = strict_rfc3339.timestamp_to_rfc3339_utcoffset(int(t.strftime("%s")))
     url = 'https://www.googleapis.com/youtube/v3/search'
@@ -240,7 +240,7 @@ def get_latest_videos_of_channel(channel_id, cap=10, since_minutes_ago=120):
 
 
 def get_videos_of_channel(channel_id, page=None, cap=50):
-    assert cap < 50  # 50 is the highest authorized value in 2017
+    assert cap < 51  # 50 is the highest authorized value in 2017
     url = 'https://www.googleapis.com/youtube/v3/search'
     parameters = {
         'key': YOUTUBE_API_KEY,
