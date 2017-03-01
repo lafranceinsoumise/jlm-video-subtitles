@@ -35,6 +35,7 @@ import re
 import sys
 import datetime
 import dateutil.parser
+import locale
 import isodate
 import strict_rfc3339
 import argparse
@@ -354,6 +355,9 @@ class Video:
         """
         self.yid = yid
         self.title = title
+        print("TITLE")
+        pprint(title)
+        print(type(title))
         self.date = dateutil.parser.parse(date)
         if duration is not None:
             self.duration = isodate.parse_duration(duration)
@@ -366,6 +370,27 @@ class Video:
     @property
     def slug(self):
         return slugify(self.title)
+
+    @property
+    def day_fr(self):
+        locale.setlocale(locale.LC_TIME, "fr_FR.utf8")
+        day = self.date.strftime("%A %d %B %Y")
+        locale.resetlocale(locale.LC_TIME)
+        return day.capitalize().decode('utf-8')
+
+    @property
+    def day_en(self):
+        locale.setlocale(locale.LC_TIME, "en_US.utf8")
+        day = self.date.strftime("%A, %d %B %Y")
+        locale.resetlocale(locale.LC_TIME)
+        return day.decode('utf-8')
+
+    @property
+    def day_de(self):
+        locale.setlocale(locale.LC_TIME, "de_DE.utf8")
+        day = self.date.strftime("%A %d %B %Y")
+        locale.resetlocale(locale.LC_TIME)
+        return day.decode('utf-8')
 
 
 class Caption:
@@ -574,11 +599,15 @@ if __name__ == "__main__":
                 'label': 'Language: French',
                 'column': '398411',
                 'issue': u"""
-Titre | {video.title}
------ | -----
-Durée | {video.duration}
-Langue | Français
-Liens | [VIDÉO](https://www.youtube.com/watch?v={video.yid}) - [ÉDITEUR](https://www.youtube.com/timedtext_editor?v={video.yid}&tab=captions&bl=vmp&action_mde_edit_form=1&lang=fr&ui=hd)
+## {video.title}
+
+&nbsp;          | Info
+--------------- | ---------------
+**Date**        | {video.day_fr}
+**Durée**       | {video.duration} :clock7:
+**Langue**      | Français :fr:
+**Vidéo**       | [Voir dans YouTube :arrow_upper_right:](https://www.youtube.com/watch?v={video.yid})
+**Sous-titres** | [Éditer dans YouTube :arrow_upper_right:](https://www.youtube.com/timedtext_editor?v={video.yid}&tab=captions&bl=vmp&action_mde_edit_form=1&lang=en&ui=hd)
 """
             }
             ,
@@ -587,11 +616,15 @@ Liens | [VIDÉO](https://www.youtube.com/watch?v={video.yid}) - [ÉDITEUR](https
                 'label': 'Language: English',
                 'column': '387590',
                 'issue': u"""
-Title | {video.title}
------ | -----
-Duration | {video.duration}
-Language | English
-Links | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https://www.youtube.com/timedtext_editor?v={video.yid}&tab=captions&bl=vmp&action_mde_edit_form=1&lang=en&ui=hd)
+## {video.title}
+
+&nbsp;        | Info
+------------- | -------------
+**Date**      | {video.day_en}
+**Duration**  | {video.duration} :clock7:
+**Language**  | English :gb:
+**Video**     | [See it on YouTube :arrow_upper_right:](https://www.youtube.com/watch?v={video.yid})
+**Subtitles** | [Edit them in YouTube :arrow_upper_right:](https://www.youtube.com/timedtext_editor?v={video.yid}&tab=captions&bl=vmp&action_mde_edit_form=1&lang=en&ui=hd)
 """
             }
 #             ,
@@ -603,7 +636,7 @@ Links | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https://
 # Titel | {video.title}
 # ----- | -----
 # Dauer | {video.duration}
-# Sprache | English
+# Sprache | German
 # Verweise | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https://www.youtube.com/timedtext_editor?v={video.yid}&tab=captions&bl=vmp&action_mde_edit_form=1&lang=en&ui=hd)
 # """
 #             }
@@ -661,12 +694,19 @@ Links | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https://
             labels[language['short']] = repo.get_label(language['label'])
         label_start = repo.get_label('Process: [0] Awaiting subtitles')
 
-        print("Collecting latest videos of channel %s..."
-              % colored(args.channel, "yellow"))
-
-        jsonResponse = get_latest_videos_of_channel(args.channel)
-        videos = parse_videos_from_json(jsonResponse)
-        ids = [video.yid for video in videos]
+        if args.videos:
+            print(
+                colored("Selecting video%s " % _s(args.videos), "yellow") +
+                colored(', '.join(args.videos), "magenta") +
+                colored("...", "yellow")
+            )
+            ids = args.videos
+        else:
+            print("Collecting latest videos of channel %s..."
+                  % colored(args.channel, "yellow"))
+            jsonResponse = get_latest_videos_of_channel(args.channel)
+            videos = parse_videos_from_json(jsonResponse)
+            ids = [video.yid for video in videos]
 
         jsonResponse = get_videos(ids)
         videos = parse_videos_from_json(jsonResponse)
@@ -689,9 +729,11 @@ Links | [VIDEO](https://www.youtube.com/watch?v={video.yid}) - [EDITOR](https://
                 else:
                     print("  Issue not found. Creating it now...")
                     issue_body = language['issue'].format(video=video)
-                    issue = repo.create_issue(issue_title, body=issue_body, labels=[
-                        labels[language['short']], label_start
-                    ])
+                    issue = repo.create_issue(
+                        issue_title,
+                        body=issue_body,
+                        labels=[labels[language['short']], label_start]
+                    )
                     # Ok, this is a total hack that may break at any point,
                     # because the Cards API is a dev-preview only.
                     print("  Creating a card for it as well...")
