@@ -9,6 +9,7 @@ today="$(date +'%A %d %B %Y')"
 title="JLM Captions Github Bot"
 email="antoine.goutenoir@gmail.com"
 
+export PYTHONIOENCODING="utf8"
 
 source venv/bin/activate
 

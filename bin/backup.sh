@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export PYTHONIOENCODING="utf8"
+
 source venv/bin/activate
 
 if [ $? -ne 0 ] ; then

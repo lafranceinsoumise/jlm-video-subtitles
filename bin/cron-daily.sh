@@ -11,6 +11,7 @@ today="$(date +'%A %d %B %Y')"
 title="JLM Captions Backup"
 email="antoine.goutenoir@gmail.com"
 
+export PYTHONIOENCODING="utf8"
 
 source venv/bin/activate
 
