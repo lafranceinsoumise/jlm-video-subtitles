@@ -19,11 +19,6 @@ where:
 Additionally, captions are sorted into year directories, for clarity.
 
 
-## How
-
-The `bin/backup.py` script handles downloading these files from YouTube.
-
-
 ## Warning
 
 This is merely a backup for now, there is no point in modifying these files by hand.
