@@ -13,7 +13,7 @@ where:
 
 - `videoPublicationDate` is in the format `YYYY-MM-DD`, eg: `2017-03-21`.
 - `videoTitle` has been stripped of all non-alphanumeric characters.
-- `captionLang` is the `ISO 639-1` language code, such as `fr` or `en`.
+- `captionLang` is the `ISO 639` language code, such as `fr`, `en`, or `en-US`.
 - `captionId` is YouTube's unique identifier for this caption.
 
 Additionally, captions are sorted into year directories, for clarity.
